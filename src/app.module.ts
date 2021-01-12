@@ -14,6 +14,7 @@ import { PostModule } from './post/post.module';
       playground: process.env.NODE_ENV == 'real' || true,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,
+      installSubscriptionHandlers: true,
     }),
     PostModule,
   ],

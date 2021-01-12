@@ -35,6 +35,10 @@ type Query {
   posts: [Post!]!
 }
 
+type Subscription {
+  subPost: Post!
+}
+
 input UpdatePostInput {
   """Example """
   authorId: Int

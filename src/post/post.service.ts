@@ -1,4 +1,6 @@
 import { Injectable } from '@nestjs/common';
+import { PubSub } from 'graphql-subscriptions';
+import { POST_ADDED } from 'src/author/author.const';
 import { CreatePostInput } from './dto/create-post.input';
 import { FindPostArgs } from './dto/find-post.args';
 import { UpdatePostInput } from './dto/update-post.input';
