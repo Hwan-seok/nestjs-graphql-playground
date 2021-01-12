@@ -10,7 +10,6 @@ import {
 import { PubSub } from 'graphql-subscriptions';
 import { Post } from 'src/post/entities/post.dto';
 import { PostService } from 'src/post/post.service';
-import { POST_ADDED } from './author.const';
 import { AuthorService } from './author.service';
 import { Author } from './dto/author.dto';
 

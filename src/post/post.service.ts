@@ -26,7 +26,6 @@ export class PostService {
 
   create(createPostInput: CreatePostInput) {
     const newPost: Post = { id: this.posts.length + 1, ...createPostInput };
-    console.log(newPost);
     this.posts.push(newPost);
     return newPost;
   }

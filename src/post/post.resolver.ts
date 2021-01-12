@@ -10,13 +10,17 @@ import { PostService } from './post.service';
 import { CreatePostInput } from './dto/create-post.input';
 import { UpdatePostInput } from './dto/update-post.input';
 import { Post } from './entities/post.dto';
+import { Inject } from '@nestjs/common';
+import { PUB_SUB } from 'src/pubsub/pubsub.const';
 import { PubSub } from 'graphql-subscriptions';
 import { POST_ADDED } from 'src/author/author.const';
-const pubSub = new PubSub();
 
 @Resolver(() => Post)
 export class PostResolver {
-  constructor(private readonly postService: PostService) {}
+  constructor(
+    private readonly postService: PostService,
+    @Inject(PUB_SUB) private readonly pubSub: PubSub,
+  ) {}
 
   @Mutation(() => Post)
   createPost(
@@ -24,8 +28,7 @@ export class PostResolver {
     createPostInput: CreatePostInput,
   ) {
     const newPost = this.postService.create(createPostInput);
-    pubSub.publish(POST_ADDED, { subPost: newPost });
-    console.log(newPost);
+    this.pubSub.publish(POST_ADDED, { subPost: newPost });
     return newPost;
   }
 
@@ -34,9 +37,15 @@ export class PostResolver {
     return this.postService.findAll({ authorId: 1 });
   }
 
-  @Subscription((returns) => Post)
+  @Subscription((returns) => Post, {
+    filter: (payload, vars) => {
+      console.log(payload);
+      console.log(vars);
+      return true;
+    },
+  })
   subPost() {
-    return pubSub.asyncIterator(POST_ADDED);
+    return this.pubSub.asyncIterator(POST_ADDED);
   }
 
   @Query(() => Post, { name: 'post' })
